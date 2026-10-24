@@ -161,6 +161,11 @@ footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;
 <div class="grid" id="grid"><div class="empty" style="grid-column:1/-1">Memuat 866 entri…</div></div>
 <div class="empty" id="empty" hidden>Tidak ada hasil. Coba kata kunci / filter lain.</div>
 <footer>Data: sheet komunitas r/AndroidNativePorts + Ports Vault (Fe2rr) + sweep GitHub + Reddit. Diperbarui 24 Okt 2026.</footer>
+<div class="overlay" id="dlgOverlay"><div class="sheet" role="dialog" aria-modal="true">
+  <h4><span id="dlgTitle">Pilih</span><button type="button" id="dlgClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></h4>
+  <div id="dlgOpts"></div>
+</div></div>
+<div id="toast" role="status"></div>
 <script>
 const DATA = [
  {
@@ -8014,10 +8019,5 @@ renderBars("barSrc",cnt(DATA,"source"),k=>{selSource=selSource===k?"":k;setBtnLa
 renderChips(); renderStats(DATA); render();
 </script>
 
-<div class="overlay" id="dlgOverlay"><div class="sheet" role="dialog" aria-modal="true">
-  <h4><span id="dlgTitle">Pilih</span><button type="button" id="dlgClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></h4>
-  <div id="dlgOpts"></div>
-</div></div>
-<div id="toast" role="status"></div>
 </body>
 </html>

@@ -90,13 +90,44 @@ select{flex:0 1 auto;max-width:100%;cursor:pointer}
 .empty{color:var(--mut);text-align:center;padding:48px 16px;border:1px dashed var(--line);border-radius:var(--radius);font-size:14px}
 footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;line-height:1.6;border-top:1px solid var(--line);margin-top:20px}
 
+
+/* ---------- filter buttons, dialog, toast ---------- */
+.fbtn{display:flex;align-items:center;gap:9px;background:var(--bg2);color:var(--txt);border:1px solid var(--line);
+  border-radius:10px;padding:11px 12px;font-size:14px;min-height:44px;cursor:pointer;min-width:0;transition:border-color .15s,box-shadow .15s;text-align:left}
+.fbtn:hover{border-color:var(--line2)}
+.fbtn:focus-visible{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft);outline:none}
+.fbtn i:first-child{color:var(--acc);flex:0 0 auto}
+.fbtn .flabel{flex:1 1 auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fbtn .fa-chevron-down{color:var(--mut);font-size:11px;flex:0 0 auto}
+.overlay{position:fixed;inset:0;background:rgba(4,8,14,.62);backdrop-filter:blur(3px);z-index:50;
+  display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .18s}
+.overlay.open{opacity:1;pointer-events:auto}
+.sheet{background:var(--card2);border:1px solid var(--line2);width:100%;max-width:520px;max-height:78vh;overflow:auto;
+  border-radius:18px 18px 0 0;padding:10px 10px calc(12px + env(safe-area-inset-bottom));transform:translateY(16px);transition:transform .18s}
+.overlay.open .sheet{transform:translateY(0)}
+.sheet h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:10px 12px 8px;display:flex;justify-content:space-between;align-items:center}
+.sheet h4 button{background:none;border:none;color:var(--mut);font-size:16px;cursor:pointer;padding:4px}
+.opt{display:flex;align-items:center;gap:11px;width:100%;background:none;border:none;border-bottom:1px solid rgba(255,255,255,.05);
+  color:var(--txt);font-size:15px;padding:13px 12px;cursor:pointer;text-align:left;border-radius:8px}
+.opt:last-child{border-bottom:none}
+.opt:hover{background:rgba(255,255,255,.045)}
+.opt .fa-check{color:var(--acc);visibility:hidden;flex:0 0 auto}
+.opt.sel{font-weight:700}
+.opt.sel .fa-check{visibility:visible}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+  background:#1d2939;color:var(--txt);border:1px solid var(--line2);border-radius:999px;padding:10px 18px;font-size:13.5px;
+  box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:all .22s;z-index:60;max-width:92vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast i{color:var(--acc);margin-right:7px}
+@media (min-width:641px){ .overlay{align-items:center;padding:20px} .sheet{border-radius:18px} }
+
 /* ---------- mobile ---------- */
 @media (max-width:640px){
   body{padding:12px 10px 4px}
   header{padding:16px 15px 14px;border-radius:14px}
   .stats{grid-template-columns:repeat(2,1fr)}
   .controls{flex-direction:column}
-  .controls input[type=search],.controls select{width:100%;flex:1 1 auto}
+  .controls input[type=search],.controls .fbtn{width:100%;flex:1 1 auto}
   .panel{padding:12px}
 }
 @media (max-width:420px){
@@ -115,9 +146,9 @@ footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;
 <div class="panel">
   <div class="controls">
     <input type="search" id="q" placeholder="Cari game / project… (mis. zelda, nfs, recomp)">
-    <select id="fSource"><option value="">Semua sumber</option></select>
-    <select id="fNeeds"><option value="">Semua kebutuhan file</option><option value="rom">Butuh ROM</option><option value="game">Butuh file game</option><option value="no">Tanpa file tambahan / sudah termasuk</option></select>
-    <select id="sort"><option value="az">Urut: A–Z</option><option value="za">Urut: Z–A</option><option value="plat">Urut: Platform</option></select>
+    <button type="button" class="fbtn" id="bSource"><i class="fa-solid fa-filter"></i><span class="flabel">Semua sumber</span><i class="fa-solid fa-chevron-down"></i></button>
+    <button type="button" class="fbtn" id="bNeeds"><i class="fa-solid fa-folder-open"></i><span class="flabel">Semua kebutuhan file</span><i class="fa-solid fa-chevron-down"></i></button>
+    <button type="button" class="fbtn" id="bSort"><i class="fa-solid fa-arrow-down-a-z"></i><span class="flabel">Urut: A–Z</span><i class="fa-solid fa-chevron-down"></i></button>
   </div>
   <div class="chips" id="platChips"></div>
 </div>
@@ -7928,6 +7959,7 @@ const DATA = [
 ];
 const $=id=>document.getElementById(id);
 let fPlat="";
+let selSource="", selNeeds="", selSort="az";
 const uniq=k=>[...new Set(DATA.map(d=>d[k]))];
 const cnt=(arr,k)=>arr.reduce((a,d)=>{a[d[k]]=(a[d[k]]||0)+1;return a},{});
 function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
@@ -7944,9 +7976,9 @@ function renderBars(id,obj,click){
 }
 function pcol(p){let x=0;for(const c of String(p))x=(x*31+c.charCodeAt(0))>>>0;return `hsl(${x%360} 75% 60%)`}
 function render(){
-  const q=$("q").value.trim().toLowerCase(), fs=$("fSource").value, fn=$("fNeeds").value;
+  const q=$("q").value.trim().toLowerCase(), fs=selSource, fn=selNeeds;
   let list=DATA.filter(d=>(!q||(d.game+" "+d.project+" "+d.platform).toLowerCase().includes(q))&&(!fPlat||d.platform===fPlat)&&(!fs||d.source===fs)&&(!fn||needsClass(d.needs)===fn));
-  const s=$("sort").value;
+  const s=selSort;
   list.sort((a,b)=> s==="za"? b.game.localeCompare(a.game) : s==="plat"? (a.platform+a.game).localeCompare(b.platform+b.game) : a.game.replace(/^the /i,"").localeCompare(b.game.replace(/^the /i,"")));
   $("count").textContent=`Menampilkan ${list.length} dari ${DATA.length} entri`+(fPlat?` • platform: ${fPlat}`:"");
   $("empty").hidden=list.length>0;
@@ -7956,13 +7988,35 @@ function render(){
 function renderChips(){
   const c=cnt(DATA,"platform");
   $("platChips").innerHTML=`<button class="chip ${!fPlat?"on":""}" data-p="">Semua platform</button>`+Object.entries(c).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<button class="chip ${fPlat===k?"on":""}" data-p="${esc(k)}">${esc(k)} (${v})</button>`).join("");
-  $("platChips").querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{fPlat=ch.dataset.p;renderChips();render()});
+  $("platChips").querySelectorAll(".chip").forEach(ch=>ch.onclick=()=>{fPlat=ch.dataset.p;renderChips();render();showToast(fPlat?("Platform: "+fPlat):"Platform: semua")});
 }
-uniq("source").sort().forEach(s=>{const o=document.createElement("option");o.value=s;o.textContent=s;$("fSource").appendChild(o)});
-["q","fSource","fNeeds","sort"].forEach(id=>$(id).addEventListener("input",render));
+$("q").addEventListener("input",render);
+let toastTimer=null;
+function showToast(msg){const t=$("toast");t.innerHTML='<i class="fa-solid fa-circle-check"></i>'+esc(msg);t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),1900)}
+const DLGS={
+ source:{title:"Sumber data",btn:"bSource",get:()=>selSource,set:v=>{selSource=v},opts:()=>[{v:"",t:"Semua sumber"},...uniq("source").sort().map(s=>({v:s,t:s}))]},
+ needs:{title:"Kebutuhan file",btn:"bNeeds",get:()=>selNeeds,set:v=>{selNeeds=v},opts:()=>[{v:"",t:"Semua kebutuhan file"},{v:"rom",t:"Butuh ROM"},{v:"game",t:"Butuh file game"},{v:"no",t:"Tanpa file tambahan / sudah termasuk"}]},
+ sort:{title:"Urutkan",btn:"bSort",get:()=>selSort,set:v=>{selSort=v},opts:()=>[{v:"az",t:"Urut: A–Z"},{v:"za",t:"Urut: Z–A"},{v:"plat",t:"Urut: Platform"}]},
+};
+let dlgKind=null;
+function setBtnLabel(kind){const d=DLGS[kind];const cur=d.opts().find(o=>o.v===d.get());$(d.btn).querySelector(".flabel").textContent=cur?cur.t:"-"}
+function openDlg(kind){dlgKind=kind;const d=DLGS[kind];$("dlgTitle").textContent=d.title;
+  $("dlgOpts").innerHTML=d.opts().map(o=>`<button type="button" class="opt ${o.v===d.get()?"sel":""}" data-v="${esc(o.v)}"><i class="fa-solid fa-check"></i><span>${esc(o.t)}</span></button>`).join("");
+  $("dlgOpts").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{d.set(b.dataset.v);setBtnLabel(kind);closeDlg();render();showToast(d.title+": "+b.textContent.trim())});
+  $("dlgOverlay").classList.add("open")}
+function closeDlg(){$("dlgOverlay").classList.remove("open")}
+$("bSource").onclick=()=>openDlg("source");$("bNeeds").onclick=()=>openDlg("needs");$("bSort").onclick=()=>openDlg("sort");
+$("dlgClose").onclick=closeDlg;$("dlgOverlay").addEventListener("click",e=>{if(e.target.id==="dlgOverlay")closeDlg()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDlg()});
 renderBars("barPlat",cnt(DATA,"platform"),k=>{fPlat=fPlat===k?"":k;renderChips();render()});
-renderBars("barSrc",cnt(DATA,"source"),k=>{$("fSource").value=$("fSource").value===k?"":k;render()});
+renderBars("barSrc",cnt(DATA,"source"),k=>{selSource=selSource===k?"":k;setBtnLabel("source");render();showToast(selSource?("Sumber: "+k):"Sumber: semua")});
 renderChips(); renderStats(DATA); render();
 </script>
+
+<div class="overlay" id="dlgOverlay"><div class="sheet" role="dialog" aria-modal="true">
+  <h4><span id="dlgTitle">Pilih</span><button type="button" id="dlgClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button></h4>
+  <div id="dlgOpts"></div>
+</div></div>
+<div id="toast" role="status"></div>
 </body>
 </html>

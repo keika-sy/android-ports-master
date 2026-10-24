@@ -3,53 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0e13">
+<meta name="description" content="Katalog & dashboard port game native Android: 866 entri, 702 game — decomp, recomp, source port.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
 <title>Android Ports — Master Dashboard</title>
 <style>
-:root{--bg:#0b0f14;--card:#131a22;--card2:#182230;--line:#243144;--txt:#e8eef5;--mut:#8fa3b8;--acc:#ffc900;--acc2:#4da3ff}
+:root{
+  --bg:#0a0e13;--bg2:#0d131b;--card:#121922;--card2:#182130;--line:#22304a;--line2:#2c3e5c;
+  --txt:#e9eff7;--mut:#93a5bb;--mut2:#6e8299;
+  --acc:#ffc900;--acc-soft:rgba(255,201,0,.12);--blue:#4da3ff;--blue-soft:rgba(77,163,255,.12);
+  --radius:14px;--shadow:0 6px 22px rgba(0,0,0,.35);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 html,body{overflow-x:hidden}
-body{background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;padding:16px;width:100%;max-width:1280px;margin:0 auto}
-header{display:flex;flex-wrap:wrap;gap:12px;align-items:end;justify-content:space-between;margin-bottom:14px}
-h1{font-size:clamp(20px,5vw,28px);font-weight:800;line-height:1.15} h1 span{color:var(--acc)}
-.sub{color:var(--mut);font-size:13px;margin-top:4px;line-height:1.45}
+::selection{background:var(--acc);color:#111}
+body{
+  background:
+    radial-gradient(900px 480px at 85% -10%,rgba(77,163,255,.13),transparent 60%),
+    radial-gradient(700px 420px at -10% 0%,rgba(255,201,0,.08),transparent 55%),
+    var(--bg);
+  color:var(--txt);font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',sans-serif;
+  padding:20px 16px 8px;width:100%;max-width:1280px;margin:0 auto;line-height:1.5;
+}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#263650;border-radius:99px;border:2px solid var(--bg)}::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- header ---------- */
+header{margin-bottom:18px;padding:22px 22px 20px;border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(135deg,rgba(255,201,0,.10),rgba(77,163,255,.07) 55%,rgba(255,255,255,.02)),var(--card);
+  box-shadow:var(--shadow)}
+h1{font-size:clamp(22px,5vw,32px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+h1 span{background:linear-gradient(92deg,#ffd93b,#ffb300);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);font-size:13.5px;margin-top:6px;max-width:640px}
+
+/* ---------- stats ---------- */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:10px;margin-bottom:14px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
-.stat b{font-size:clamp(19px,5vw,24px);display:block;color:var(--acc)}
-.stat small{color:var(--mut);font-size:12px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
-.controls{display:flex;flex-wrap:wrap;gap:8px}
-input[type=search],select{background:var(--card2);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:10px 11px;font-size:14px;min-width:0}
+.stat{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);
+  padding:13px 15px;min-width:0;box-shadow:0 2px 10px rgba(0,0,0,.22)}
+.stat small{color:var(--mut);font-size:12px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.stat b{font-size:clamp(21px,5vw,27px);display:block;color:var(--acc);font-weight:800;letter-spacing:-.01em;margin-top:2px}
+
+/* ---------- panels & controls ---------- */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.controls{display:flex;flex-wrap:wrap;gap:9px}
+input[type=search],select{background:var(--bg2);color:var(--txt);border:1px solid var(--line);border-radius:10px;
+  padding:11px 12px;font-size:14px;min-width:0;min-height:44px;outline:none;transition:border-color .15s,box-shadow .15s}
 input[type=search]{flex:1 1 220px}
-select{flex:0 1 auto;max-width:100%}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.chip{border:1px solid var(--line);background:var(--card2);color:var(--mut);border-radius:999px;padding:7px 12px;font-size:12px;cursor:pointer;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.chip.on{background:var(--acc);color:#111;border-color:var(--acc);font-weight:700}
-.bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px}
-.bar-row{display:flex;align-items:center;gap:8px;font-size:12px;margin:5px 0;cursor:pointer;min-width:0}
+input[type=search]:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-soft)}
+select{flex:0 1 auto;max-width:100%;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}
+.chip{border:1px solid var(--line);background:var(--bg2);color:var(--mut);border-radius:999px;padding:7px 13px;font-size:12.5px;
+  cursor:pointer;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:all .15s;font-weight:500}
+.chip:hover{border-color:var(--line2);color:var(--txt);transform:translateY(-1px)}
+.chip.on{background:linear-gradient(180deg,#ffd93b,#ffc900);color:#161006;border-color:#e0aa00;font-weight:700;box-shadow:0 3px 10px rgba(255,201,0,.25)}
+
+/* ---------- bar charts ---------- */
+.bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:8px 28px}
+.bars>div>b{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--mut);font-weight:700}
+.bar-row{display:flex;align-items:center;gap:9px;font-size:12.5px;margin:7px 0;cursor:pointer;min-width:0;border-radius:8px;padding:2px 4px;margin-left:-4px;transition:background .15s}
+.bar-row:hover{background:rgba(255,255,255,.04)}
 .bar-row .lbl{flex:0 0 118px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bar{flex:1 1 auto;height:9px;background:var(--card2);border-radius:99px;overflow:hidden;min-width:30px}
-.bar i{display:block;height:100%;background:var(--acc2);border-radius:99px}
-.bar-row b{flex:0 0 auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:10px}
-.gcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0;overflow:hidden}
-.gcard h3{font-size:15px;margin-bottom:2px;overflow-wrap:anywhere}
-.gcard .proj{color:var(--acc2);font-size:13px;font-weight:600;overflow-wrap:anywhere}
-.gcard p{color:var(--mut);font-size:12px;margin-top:6px;line-height:1.45;overflow-wrap:anywhere}
-.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.bdg{font-size:11px;border:1px solid var(--line);border-radius:6px;padding:2px 7px;color:var(--mut);max-width:100%;overflow-wrap:anywhere}
-.bdg.plat{color:var(--acc);border-color:#5a4a00}
-.gcard a{color:var(--acc);font-size:12px;font-weight:700;text-decoration:none;word-break:break-all}
-.meta{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:center;margin:4px 0 10px;color:var(--mut);font-size:13px}
-footer{color:var(--mut);font-size:12px;text-align:center;padding:18px 0;line-height:1.5}
-.empty{color:var(--mut);text-align:center;padding:40px 0}
+.bar-row:hover .lbl{color:var(--txt)}
+.bar{flex:1 1 auto;height:9px;background:var(--bg2);border:1px solid rgba(255,255,255,.04);border-radius:99px;overflow:hidden;min-width:30px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2f7fe0,var(--blue));border-radius:99px;transition:width .35s ease}
+.bar-row b{flex:0 0 auto;font-size:12px;color:var(--txt)}
+
+/* ---------- result meta ---------- */
+.meta{display:flex;flex-wrap:wrap;gap:6px;justify-content:space-between;align-items:center;margin:2px 0 12px;color:var(--mut);font-size:13px}
+.meta span:first-child{font-weight:600;color:var(--txt)}
+
+/* ---------- game cards ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:12px}
+.gcard{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--radius);
+  padding:14px 15px;min-width:0;overflow:hidden;position:relative;transition:transform .15s,border-color .15s,box-shadow .15s}
+.gcard::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pc,var(--line2));opacity:.85}
+.gcard:hover{transform:translateY(-2px);border-color:var(--line2);box-shadow:var(--shadow)}
+.gcard h3{font-size:15.5px;font-weight:700;margin-bottom:2px;overflow-wrap:anywhere;letter-spacing:-.01em}
+.gcard .proj{color:var(--blue);font-size:13px;font-weight:600;overflow-wrap:anywhere}
+.gcard p{color:var(--mut);font-size:12.5px;margin-top:7px;line-height:1.5;overflow-wrap:anywhere}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.bdg{font-size:11px;border:1px solid var(--line);border-radius:7px;padding:3px 8px;color:var(--mut);max-width:100%;overflow-wrap:anywhere;background:rgba(255,255,255,.02)}
+.bdg.plat{color:var(--acc);border-color:rgba(255,201,0,.35);background:var(--acc-soft);font-weight:600}
+.gcard a{color:var(--acc);font-size:12px;font-weight:600;text-decoration:none;word-break:break-all}
+.gcard a:hover{text-decoration:underline}
+.empty{color:var(--mut);text-align:center;padding:48px 16px;border:1px dashed var(--line);border-radius:var(--radius);font-size:14px}
+footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;line-height:1.6;border-top:1px solid var(--line);margin-top:20px}
+
+/* ---------- mobile ---------- */
 @media (max-width:640px){
-  body{padding:10px}
+  body{padding:12px 10px 4px}
+  header{padding:16px 15px 14px;border-radius:14px}
   .stats{grid-template-columns:repeat(2,1fr)}
   .controls{flex-direction:column}
   .controls input[type=search],.controls select{width:100%;flex:1 1 auto}
-  .panel{padding:10px}
-  header{margin-bottom:10px}
+  .panel{padding:12px}
 }
 @media (max-width:420px){
   .bar-row{flex-wrap:wrap}
@@ -7894,6 +7941,7 @@ function renderBars(id,obj,click){
   $(id).innerHTML=Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([k,v])=>`<div class="bar-row" data-k="${esc(k)}" title="${esc(k)}"><span class="lbl">${esc(SHORT[k]||k)}</span><span class="bar"><i style="width:${Math.round(v/max*100)}%"></i></span><b>${v}</b></div>`).join("");
   if(click) $(id).querySelectorAll(".bar-row").forEach(r=>r.onclick=()=>click(r.dataset.k));
 }
+function pcol(p){let x=0;for(const c of String(p))x=(x*31+c.charCodeAt(0))>>>0;return `hsl(${x%360} 75% 60%)`}
 function render(){
   const q=$("q").value.trim().toLowerCase(), fs=$("fSource").value, fn=$("fNeeds").value;
   let list=DATA.filter(d=>(!q||(d.game+" "+d.project+" "+d.platform).toLowerCase().includes(q))&&(!fPlat||d.platform===fPlat)&&(!fs||d.source===fs)&&(!fn||needsClass(d.needs)===fn));
@@ -7901,7 +7949,7 @@ function render(){
   list.sort((a,b)=> s==="za"? b.game.localeCompare(a.game) : s==="plat"? (a.platform+a.game).localeCompare(b.platform+b.game) : a.game.replace(/^the /i,"").localeCompare(b.game.replace(/^the /i,"")));
   $("count").textContent=`Menampilkan ${list.length} dari ${DATA.length} entri`+(fPlat?` • platform: ${fPlat}`:"");
   $("empty").hidden=list.length>0;
-  $("grid").innerHTML=list.slice(0,600).map(d=>`<div class="gcard"><h3>${esc(d.game)}</h3><div class="proj">${esc(d.project)}</div>${d.note?`<p>${esc(d.note)}</p>`:""}<div class="badges"><span class="bdg plat">${esc(d.platform)}</span><span class="bdg">${esc(d.source)}</span><span class="bdg">📁 ${esc(d.needs||"-")}</span></div><p>${d.url.startsWith("http")?`<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.url.replace(/^https?:\/\//,"").slice(0,52))}</a>`:esc(d.url)}</p></div>`).join("");
+  $("grid").innerHTML=list.slice(0,600).map(d=>`<div class="gcard" style="--pc:${pcol(d.platform)}"><h3>${esc(d.game)}</h3><div class="proj">${esc(d.project)}</div>${d.note?`<p>${esc(d.note)}</p>`:""}<div class="badges"><span class="bdg plat">${esc(d.platform)}</span><span class="bdg">${esc(d.source)}</span><span class="bdg">📁 ${esc(d.needs||"-")}</span></div><p>${d.url.startsWith("http")?`<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.url.replace(/^https?:\/\//,"").slice(0,52))}</a>`:esc(d.url)}</p></div>`).join("");
   renderStats(list);
 }
 function renderChips(){

@@ -7888,9 +7888,10 @@ function renderStats(list){
   const games=new Set(list.map(d=>d.game.toLowerCase())).size;
   $("stats").innerHTML=[["📦",list.length,"total entri"],["🎮",games,"game unik"],["🕹️",new Set(list.map(d=>d.platform)).size,"platform asal"],["🔗",list.filter(d=>d.url.startsWith("http")).length,"punya link project"]].map(x=>`<div class="stat"><small>${x[0]} ${x[2]}</small><b>${x[1]}</b></div>`).join("");
 }
+const SHORT={"Sweep GitHub/katalog":"GitHub/katalog","Reddit r/AndroidNativePorts":"Reddit","PortMaster/Starboard":"PortMaster","Belum terklasifikasi":"Belum klasifikasi"};
 function renderBars(id,obj,click){
   const max=Math.max(...Object.values(obj),1);
-  $(id).innerHTML=Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([k,v])=>`<div class="bar-row" data-k="${esc(k)}"><span class="lbl">${esc(k)}</span><span class="bar"><i style="width:${Math.round(v/max*100)}%"></i></span><b>${v}</b></div>`).join("");
+  $(id).innerHTML=Object.entries(obj).sort((a,b)=>b[1]-a[1]).slice(0,12).map(([k,v])=>`<div class="bar-row" data-k="${esc(k)}" title="${esc(k)}"><span class="lbl">${esc(SHORT[k]||k)}</span><span class="bar"><i style="width:${Math.round(v/max*100)}%"></i></span><b>${v}</b></div>`).join("");
   if(click) $(id).querySelectorAll(".bar-row").forEach(r=>r.onclick=()=>click(r.dataset.k));
 }
 function render(){

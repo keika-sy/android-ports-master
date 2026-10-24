@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0a0e13">
 <meta name="description" content="Katalog & dashboard port game native Android: 866 entri, 702 game — decomp, recomp, source port.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+<link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/svgs/solid/gamepad.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <title>Android Ports — Master Dashboard</title>
 <style>
 :root{
@@ -107,7 +108,7 @@ footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;
 </head>
 <body>
 <header>
-  <div><h1>🎮 Android Ports <span>Master Dashboard</span></h1>
+  <div><h1><i class="fa-solid fa-gamepad" style="color:var(--acc);margin-right:6px"></i>Android Ports <span>Master Dashboard</span></h1>
   <div class="sub">Katalog port game native Android — decomp / recomp / source port. Semua port butuh file game asli milik sendiri.</div></div>
 </header>
 <div class="stats" id="stats"></div>
@@ -7933,7 +7934,7 @@ function esc(s){return String(s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt
 function needsClass(n){n=(n||"").toLowerCase(); if(n.includes("rom")||n.includes("iso"))return"rom"; if(n==="no"||n.includes("included")||n.includes("tanpa"))return"no"; return"game"}
 function renderStats(list){
   const games=new Set(list.map(d=>d.game.toLowerCase())).size;
-  $("stats").innerHTML=[["📦",list.length,"total entri"],["🎮",games,"game unik"],["🕹️",new Set(list.map(d=>d.platform)).size,"platform asal"],["🔗",list.filter(d=>d.url.startsWith("http")).length,"punya link project"]].map(x=>`<div class="stat"><small>${x[0]} ${x[2]}</small><b>${x[1]}</b></div>`).join("");
+  $("stats").innerHTML=[["fa-box-archive",list.length,"total entri"],["fa-gamepad",games,"game unik"],["fa-layer-group",new Set(list.map(d=>d.platform)).size,"platform asal"],["fa-link",list.filter(d=>d.url.startsWith("http")).length,"punya link project"]].map(x=>`<div class="stat"><small><i class="fa-solid ${x[0]}"></i> ${x[2]}</small><b>${x[1]}</b></div>`).join("");
 }
 const SHORT={"Sweep GitHub/katalog":"GitHub/katalog","Reddit r/AndroidNativePorts":"Reddit","PortMaster/Starboard":"PortMaster","Belum terklasifikasi":"Belum klasifikasi"};
 function renderBars(id,obj,click){
@@ -7949,7 +7950,7 @@ function render(){
   list.sort((a,b)=> s==="za"? b.game.localeCompare(a.game) : s==="plat"? (a.platform+a.game).localeCompare(b.platform+b.game) : a.game.replace(/^the /i,"").localeCompare(b.game.replace(/^the /i,"")));
   $("count").textContent=`Menampilkan ${list.length} dari ${DATA.length} entri`+(fPlat?` • platform: ${fPlat}`:"");
   $("empty").hidden=list.length>0;
-  $("grid").innerHTML=list.slice(0,600).map(d=>`<div class="gcard" style="--pc:${pcol(d.platform)}"><h3>${esc(d.game)}</h3><div class="proj">${esc(d.project)}</div>${d.note?`<p>${esc(d.note)}</p>`:""}<div class="badges"><span class="bdg plat">${esc(d.platform)}</span><span class="bdg">${esc(d.source)}</span><span class="bdg">📁 ${esc(d.needs||"-")}</span></div><p>${d.url.startsWith("http")?`<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.url.replace(/^https?:\/\//,"").slice(0,52))}</a>`:esc(d.url)}</p></div>`).join("");
+  $("grid").innerHTML=list.slice(0,600).map(d=>`<div class="gcard" style="--pc:${pcol(d.platform)}"><h3>${esc(d.game)}</h3><div class="proj">${esc(d.project)}</div>${d.note?`<p>${esc(d.note)}</p>`:""}<div class="badges"><span class="bdg plat">${esc(d.platform)}</span><span class="bdg">${esc(d.source)}</span><span class="bdg"><i class="fa-solid fa-folder-open"></i> ${esc(d.needs||"-")}</span></div><p>${d.url.startsWith("http")?`<a href="${esc(d.url)}" target="_blank" rel="noopener">${esc(d.url.replace(/^https?:\/\//,"").slice(0,52))}</a>`:esc(d.url)}</p></div>`).join("");
   renderStats(list);
 }
 function renderChips(){

@@ -143,7 +143,7 @@ footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;
   <div><h1><i class="fa-solid fa-gamepad" style="color:var(--acc);margin-right:6px"></i>Android Ports <span>Master Dashboard</span></h1>
   <div class="sub">Katalog port game native Android — decomp / recomp / source port. Semua port butuh file game asli milik sendiri.</div></div>
 </header>
-<div class="stats" id="stats"></div>
+<div class="stats" id="stats"><div class="stat"><small>Memuat data…</small><b>···</b></div></div>
 <div class="panel">
   <div class="controls">
     <input type="search" id="q" placeholder="Cari game / project… (mis. zelda, nfs, recomp)">
@@ -151,14 +151,14 @@ footer{color:var(--mut2);font-size:12px;text-align:center;padding:22px 8px 14px;
     <button type="button" class="fbtn" id="bNeeds"><i class="fa-solid fa-folder-open"></i><span class="flabel">Semua kebutuhan file</span><i class="fa-solid fa-chevron-down"></i></button>
     <button type="button" class="fbtn" id="bSort"><i class="fa-solid fa-arrow-down-a-z"></i><span class="flabel">Urut: A–Z</span><i class="fa-solid fa-chevron-down"></i></button>
   </div>
-  <div class="chips" id="platChips"></div>
+  <div class="chips" id="platChips"><span style="color:var(--mut);font-size:13px">Memuat platform…</span></div>
 </div>
 <div class="panel bars">
-  <div><b>Per Platform</b><div id="barPlat" style="margin-top:8px"></div></div>
-  <div><b>Per Sumber</b><div id="barSrc" style="margin-top:8px"></div></div>
+  <div><b>Per Platform</b><div id="barPlat" style="margin-top:8px"><div style="color:var(--mut);font-size:13px">Memuat…</div></div></div>
+  <div><b>Per Sumber</b><div id="barSrc" style="margin-top:8px"><div style="color:var(--mut);font-size:13px">Memuat…</div></div></div>
 </div>
 <div class="meta"><span id="count"></span><span> Klik kartu platform/sumber buat memfilter</span></div>
-<div class="grid" id="grid"></div>
+<div class="grid" id="grid"><div class="empty" style="grid-column:1/-1">Memuat 866 entri…</div></div>
 <div class="empty" id="empty" hidden>Tidak ada hasil. Coba kata kunci / filter lain.</div>
 <footer>Data: sheet komunitas r/AndroidNativePorts + Ports Vault (Fe2rr) + sweep GitHub + Reddit. Diperbarui 24 Okt 2026.</footer>
 <script>

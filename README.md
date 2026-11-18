@@ -1,6 +1,6 @@
 # 🎮 Android Ports — Master Dashboard
 
-Katalog port game native Android (decompilasi, rekompilasi statik, dan source port) — **866 entri, 702 game unik**.
+Katalog port game native Android (decompilasi, rekompilasi statik, dan source port) — **1297 entri, 1035 game unik**.
 
 ## 🌐 Dashboard
 Buka `index.html` di browser (atau aktifkan GitHub Pages dari branch `main` / root) — dashboard lengkap dengan pencarian, filter platform/sumber/kebutuhan file, statistik, dan grafik distribusi. Datanya tertanam langsung di halaman, tidak butuh server.
